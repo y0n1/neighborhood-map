@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Neighborhood Map</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+  <nav id="drawer"></nav>
+  <main>
+    <button id="menu">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M2 6h20v3H2zm0 5h20v3H2zm0 5h20v3H2z"></path>
+      </svg>
+    </button>
+    <div id="map"></div>
+  </main>
+
+  <script>
+    function initMap() {
+      var settings = {
+        center: {
+          lat: -34.624,
+          lng: 301.557
+        },
+        zoom: 12,
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+          position: google.maps.ControlPosition.TOP_CENTER
+        }
+      };
+      map = new google.maps.Map(document.getElementById('map'), settings);
+    };
+
+  </script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDJt0e0lCTwU90q744UJPNHvObEEr70Ds&callback=initMap"
+    type="text/javascript"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="http://knockoutjs.com/downloads/knockout-3.4.2.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>
