@@ -1,0 +1,16 @@
+#drawer {
+  box-sizing: border-box;
+  /*background-color: #1C262F;*/
+  background-color: white;
+  opacity: 0.85;
+  width: 300px;
+  height: 100%;
+  position: fixed;
+  z-index: 9999;
+  transform: translate(-300px, 0);
+  transition: transform 0.3s ease;
+}
+
+#drawer.open {
+  transform: translate(0, 0);
+}

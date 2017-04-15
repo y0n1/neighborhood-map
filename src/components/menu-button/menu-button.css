@@ -1,0 +1,19 @@
+#menu {
+  border-width: thin;
+  border-color: transparent;
+  border-radius: 3px;
+  position: fixed;
+  margin: 10px 14px;
+  z-index: 9998;
+  background-color: white;
+}
+
+#menu:focus {
+  outline-style: auto;
+  outline-width: 1px;
+}
+
+#menu svg {
+  width: 40px;
+  fill: #707070;
+}
