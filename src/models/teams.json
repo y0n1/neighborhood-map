@@ -1,32 +1,37 @@
-{
-  "river": {
+[
+  {
+    "name": "River",
     "coordinates": {
       "lat": -34.545236,
       "lng": -58.449746
     }
   },
-  "boca": {
+  {
+    "name": "Boca",
     "coordinates": {
       "lat": -34.635607,
       "lng": -58.364751
     }
   },
-  "independiente": {
+  {
+    "name": "Independiente",
     "coordinates": {
       "lat": -34.659071,
       "lng": -58.367513
     }
   },
-  "san_lorenzo": {
+  {
+    "name": "San Lorenzo",
     "coordinates": {
       "lat": -34.652166,
       "lng": -58.437009
     }
   },
-  "racing": {
+  {
+    "name": "Racing",
     "coordinates": {
       "lat": -34.663447,
       "lng": -58.362874
     }
   }
-}
+]

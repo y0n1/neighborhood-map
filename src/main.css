@@ -11,7 +11,47 @@ main {
   box-sizing: border-box;
 }
 
-/*@import 'components/map/style.css';*/
-/*@import 'components/drawer/style.css';*/
-/*@import 'components/list-view/style.css';*/
-@import 'components/menu-button/menu-button.css';
+#map {
+  height: 100%;
+}
+
+#hamburger-button {
+  border-width: thin;
+  border-color: transparent;
+  border-radius: 3px;
+  position: fixed;
+  margin: 10px 14px;
+  z-index: 9998;
+  background-color: white;
+}
+
+#hamburger-button:focus {
+  outline-style: auto;
+  outline-width: 1px;
+}
+
+#hamburger-button svg {
+  width: 40px;
+  fill: #707070;
+}
+
+#drawer {
+  box-sizing: border-box;
+  /*background-color: #1C262F;*/
+  background-color: white;
+  opacity: 0.85;
+  width: 300px;
+  height: 100%;
+  position: fixed;
+  z-index: 9999;
+  transform: translate(-300px, 0);
+  transition: transform 0.3s ease;
+}
+
+#drawer.open {
+  transform: translate(0, 0);
+}
+
+#search-box {
+  background-color: white;
+}
