@@ -7,13 +7,11 @@
   "name": "neighborhood-map",
   "private": true,
   "scripts": {
-    "debug": "live-server src --port=9000 --ignore=$(pwd)/package.json,$(pwd)/node_modules",
+    "debug": "live-server src --port=9000",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "version": "1.0.0",
   "dependencies": {
-    "knockout": "^3.4.2",
-    "requirejs": "^2.3.3",
-    "text": "github:requirejs/text"
+    "knockout": "^3.4.2"
   }
 }
