@@ -31,7 +31,7 @@
         <label for="serach-box" id="search-box--label">Search</label>
         <input type="search" id="search-box" data-bind="value: query, valueUpdate: 'keyup'" aurocomplete='off'>
         <ul data-bind="foreach: {data: visibleTeams, as: 'team'}">
-          <li data-bind="text: team.name"></li>
+          <li data-bind="text: team.name, click: team.click"></li>
         </ul>
       </nav>
       <div id="map" data-bind="click: close"></div>

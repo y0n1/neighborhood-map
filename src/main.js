@@ -13,9 +13,15 @@ function init() {
 
     this.name = name;
     this.position = ko.observable(position);
+    this.infoWindow = new google.maps.InfoWindow();
     this.marker = new google.maps.Marker({
       map: map,
+      title: self.name,
+      animation: google.maps.Animation.DROP,
       position: self.position()
+    });
+    this.marker.addListener('click', function () {
+      self.infoWindow.open(map, self.marker);
     });
     this.visible = ko.observable(true);
     this.visible.subscribe(function changeVisibility(isVisible) {
@@ -23,16 +29,30 @@ function init() {
     });
   }
 
+  Team.timer = null;
+
+  Team.prototype.click = function click() {
+    var self = this;
+
+    map.setCenter(this.position());
+    self.infoWindow.open(map, self.marker);
+    self.marker.setAnimation(google.maps.Animation.BOUNCE);
+    Team.timer = setTimeout(function () {
+      // clearTimeout(Team.timer);
+      self.marker.setAnimation(null);
+    }, 3000);
+  };
+
   function MainViewModel() {
     this.isOpen = ko.observable(false);
+    this.query = ko.observable('');
     this.teams = ko.observableArray([
-      new Team("River", { "lat": -34.545236, "lng": -58.449746 }),
-      new Team("Boca", { "lat": -34.635607, "lng": -58.364751 }),
+      new Team("River Plate", { "lat": -34.545236, "lng": -58.449746 }),
+      new Team("Boca Juniors", { "lat": -34.635607, "lng": -58.364751 }),
       new Team("Independiente", { "lat": -34.659071, "lng": -58.367513 }),
       new Team("San Lorenzo", { "lat": -34.652166, "lng": -58.437009 }),
       new Team("Racing", { "lat": -34.663447, "lng": -58.362874 }),
     ]);
-    this.query = ko.observable('');
     this.visibleTeams = ko.observableArray(this.teams());
     this.query.subscribe(function search(searchValue) {
       this.visibleTeams(this.teams().filter(function (team) {
