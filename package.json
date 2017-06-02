@@ -7,7 +7,7 @@
   "name": "neighborhood-map",
   "private": true,
   "scripts": {
-    "debug": "live-server src --port=9000",
+    "debug": "live-server src --port 8000",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "version": "1.0.0",
