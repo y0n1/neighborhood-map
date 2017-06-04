@@ -30,6 +30,7 @@ function init() {
     }));
 
     const fetchSettings = {
+      mode: 'no-cors',
       method: 'POST',
       headers: new Headers({
         'content-type': 'application/x-www-form-urlencoded'
@@ -64,6 +65,7 @@ function init() {
 
       const { token_type, access_token } = _cache.get(CacheKeys.AUTH_DATA.name)
       const fetchSettings = {
+        mode: 'no-cors',
         method: 'GET',
         headers: new Headers({
           'authorization': `${token_type} ${access_token}`
