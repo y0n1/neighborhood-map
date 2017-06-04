@@ -22,6 +22,6 @@ The whole code is written in **ES6** so you'll need a modern browser (like Googl
 The following is a list of tasks and improvement it still lacks:
 
 - Create a better documentation
-- Add Linux and widnows scripts for running Chrome with --disable-web-security flag
+- Add Linux and Windows scripts for running Chrome with --disable-web-security flag
 - Improve menu's style
 - Add production ready version, possibly using Webpack
