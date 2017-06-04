@@ -9,83 +9,42 @@ function init() {
 
   const _cache = new Map();
   const CacheKeys = {
-    AUTH_DATA: { name: 'AuthenticationData', value: 1 },
     TEAMS_DATA: { name: 'TeamsData', value: 2 }
   };
   let currentOpenInfoWindow;
 
-  async function _authenticate() {
-    const authData = _cache.get(CacheKeys.AUTH_DATA.name);
-    if (authData) {
-      const hasNotExpiredAccessToken = Date.now() - authData.expires_in * 1000 > 0;
-      if (hasNotExpiredAccessToken) {
-        return authData.access_token;
-      }
-    }
-
-    const data = new URLSearchParams(Object.entries({
-      grant_type: 'client_credentials',
-      client_id: 'L9NGO7AJfIXDH78gNFvCSA',
-      client_secret: 'Y6yy6I0dALQ9n1KRuZIMzBdGq5ShQ6m2HsGFnTredX3M6OgQvipo6Biet4vVthAN'
-    }));
-
-    const fetchSettings = {
-      mode: 'no-cors',
-      method: 'POST',
-      headers: new Headers({
-        'content-type': 'application/x-www-form-urlencoded'
-      }),
-      body: data
-    }
-
-    const endpoint = 'https://api.yelp.com/oauth2/token';
-    let returnValue;
-    try {
-      const response = await fetch(endpoint, fetchSettings);
-      const body = await response.text();
-      _cache.set(CacheKeys.AUTH_DATA.name, JSON.parse(body));
-      returnValue = JSON.parse(body)['access_token'];
-    } catch (error) {
-      throw new Error(`Authentication failed: ${error.message}`);
-    }
-
-    return returnValue;
-  }
-
   async function _getInfoWindowContent(infoWindow, marker, lat, lng, term) {
     const teamsData = _cache.get(CacheKeys.TEAMS_DATA.name);
     if (!teamsData || !teamsData[term]) {
+      const today = new Date();
+      const [dd,mm,yyyy] = today.toLocaleDateString('fr-FR').split('/');
       const queryString = new URLSearchParams(Object.entries({
-        latitude: lat,
-        longitude: lng,
-        term: term,
-        categories: 'sports_clubs',
-        sort_by: 'best_match'
+        ll: `${lat},${lng}`,
+        query: term,
+        v: `${yyyy}${mm}${dd}`,
+        intent: 'match',
+        client_id: 'QUYNYDUOIUVPL1QJD1UVC2OFNEQ1IA3RICXW42RRBJ10NJMX',
+        client_secret: 'QGQOJS132CBIDNUZVVPQKN32555JX2OMBWNMSG30C0TLHHT2'
       }));
 
-      const { token_type, access_token } = _cache.get(CacheKeys.AUTH_DATA.name)
       const fetchSettings = {
-        mode: 'no-cors',
-        method: 'GET',
-        headers: new Headers({
-          'authorization': `${token_type} ${access_token}`
-        })
+        method: 'GET'
       }
 
-      const endpoint = 'https://api.yelp.com/v3/businesses/search';
+      const endpoint = 'https://api.foursquare.com/v2/venues/search';
       try {
         const response = await fetch(`${endpoint}?${queryString}`, fetchSettings);
-        const body = JSON.parse(await response.text());
-        if (body.businesses.length == 0) {
-          throw new Error(`No data available for ${term}`);
+        const body = await response.json();
+        if (body.response.venues.length == 0) {
+          alert(`No data available for ${term}`);
         }
 
-        const firstBusiness = body.businesses[0];
-        const newContentString = `<h4><a target="_blank" href="${firstBusiness.url}">${firstBusiness.name}</a></h4>`;
+        const firstVenue = body.response.venues[0];
+        const newContentString = firstVenue.url ? `<h4><a onclick="window.open('${firstVenue.url}');" href="${firstVenue.url}">${firstVenue.name}</a></h4>` : `<h4>${firstVenue.name}</h4>`;
         _cache.set(CacheKeys.TEAMS_DATA.name, { [`${term}`]: newContentString });
         infoWindow.setContent(newContentString);
       } catch (error) {
-        console.error(error);
+        alert(error.message);
       }
     }
 
@@ -130,7 +89,6 @@ function init() {
 
       map.setCenter(this.position());
       this.toggleBounce();
-      await _authenticate();
       await _getInfoWindowContent(this.infoWindow, this.marker, this.position().lat, this.position().lng, this.name);
       this.toggleBounce();
     }
