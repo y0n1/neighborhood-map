@@ -12,9 +12,9 @@ function init() {
     AUTH_DATA: { name: 'AuthenticationData', value: 1 },
     TEAMS_DATA: { name: 'TeamsData', value: 2 }
   };
-  const openInfoWindows = new Set();
+  let currentOpenInfoWindow;
 
-  async function authenticate() {
+  async function _authenticate() {
     const authData = _cache.get(CacheKeys.AUTH_DATA.name);
     if (authData) {
       const hasNotExpiredAccessToken = Date.now() - authData.expires_in * 1000 > 0;
@@ -51,7 +51,7 @@ function init() {
     return returnValue;
   }
 
-  async function getInfoWindowContent(infoWindow, marker, lat, lng, term) {
+  async function _getInfoWindowContent(infoWindow, marker, lat, lng, term) {
     const teamsData = _cache.get(CacheKeys.TEAMS_DATA.name);
     if (!teamsData || !teamsData[term]) {
       const queryString = new URLSearchParams(Object.entries({
@@ -79,7 +79,7 @@ function init() {
         }
 
         const firstBusiness = body.businesses[0];
-        const newContentString = `<h4><a href="${firstBusiness.url}">${firstBusiness.name}</a></h4>`;
+        const newContentString = `<h4><a target="_blank" href="${firstBusiness.url}">${firstBusiness.name}</a></h4>`;
         _cache.set(CacheKeys.TEAMS_DATA.name, { [`${term}`]: newContentString });
         infoWindow.setContent(newContentString);
       } catch (error) {
@@ -87,12 +87,14 @@ function init() {
       }
     }
 
-    openInfoWindows.add(infoWindow);
+    currentOpenInfoWindow = infoWindow;
     infoWindow.open(map, marker);
   }
 
   class Team {
     constructor(name, position) {
+      const self = this;
+
       this.name = name;
       this.visible = ko.observable(true);
       this.position = ko.observable(position);
@@ -107,19 +109,28 @@ function init() {
       this.marker.addListener('click', this.click.bind(this));
 
       this.visible.subscribe(function changeVisibility(isVisible) {
-        this.marker.setVisible(isVisible);
+        self.marker.setVisible(isVisible);
       });
     }
 
+    toggleBounce() {
+      if (this.marker.getAnimation() !== null) {
+        this.marker.setAnimation(null);
+      } else {
+        this.marker.setAnimation(google.maps.Animation.BOUNCE);
+      }
+    }
+
     async click() {
-      openInfoWindows.forEach((openInfoWindow) => {
-        if (openInfoWindow.content !== this.infoWindow.content) {
-          openInfoWindow.close();
-        }
-      });
+      if (currentOpenInfoWindow && currentOpenInfoWindow.content !== this.infoWindow.content) {
+        currentOpenInfoWindow.close();
+      }
+
       map.setCenter(this.position());
-      await authenticate();
-      await getInfoWindowContent(this.infoWindow, this.marker, this.position().lat, this.position().lng, this.name);
+      this.toggleBounce();
+      await _authenticate();
+      await _getInfoWindowContent(this.infoWindow, this.marker, this.position().lat, this.position().lng, this.name);
+      this.toggleBounce();
     }
   }
 
