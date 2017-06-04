@@ -60,4 +60,4 @@ typings/
 .history/
 .vscode/
 .idea/
-yelp.credentials
+foursquare.credentials
