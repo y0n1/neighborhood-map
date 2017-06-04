@@ -7,13 +7,14 @@
   "name": "neighborhood-map",
   "private": true,
   "scripts": {
-    "start": "live-server src --no-browser",
+    "start": "serve src",
     "debug": "live-server src --port=8000",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "version": "1.0.0",
   "dependencies": {
-    "knockout": "^3.4.2"
+    "knockout": "^3.4.2",
+    "serve": "^5.2.1"
   },
   "devDependencies": {
     "live-server": "^1.2.0"
