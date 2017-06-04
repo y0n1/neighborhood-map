@@ -16,7 +16,7 @@ This task can be executed with the following command:
 ```javascript
 npm run debug
 ```
-The whole code is written in **ES6** so you'll need a modern browser (like Google Chrome v58+) to be able to run the project. Due to CORS there is a script at the root the repository which enables open a Google Chrome window with the --disable-web-security flag, though this script works only in Mac.
+The whole code is written in **ES6** so you'll need a modern browser (like Google Chrome v58+) to be able to run the project. Due to CORS there is a script at the root the repository which enables open a Google Chrome window with the --disable-web-security flag, though this script works only on MacOS for now.
 
 # Future milestones and improvements
 The following is a list of tasks and improvement it still lacks:
