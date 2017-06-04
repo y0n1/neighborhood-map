@@ -7,6 +7,7 @@
   "name": "neighborhood-map",
   "private": true,
   "scripts": {
+    "start": "npm run debug",
     "debug": "live-server src --port 8000",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
