@@ -40,7 +40,8 @@ function init() {
         }
 
         const firstVenue = body.response.venues[0];
-        const newContentString = firstVenue.url ? `<h4><a onclick="window.open('${firstVenue.url}');" href="${firstVenue.url}">${firstVenue.name}</a></h4>` : `<h4>${firstVenue.name}</h4>`;
+        const noWebSiteContentString = `<h4>${firstVenue.name}</h4><h5><i>Website not available</i></h5>`;
+        const newContentString = firstVenue.url ? `<h4><a onclick="window.open('${firstVenue.url}');" href="${firstVenue.url}">${firstVenue.name}</a></h4>` : noWebSiteContentString;
         _cache.set(CacheKeys.TEAMS_DATA.name, { [`${term}`]: newContentString });
         infoWindow.setContent(newContentString);
       } catch (error) {
