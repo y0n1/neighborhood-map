@@ -11,7 +11,7 @@ function init() {
   const CacheKeys = {
     TEAMS_DATA: { name: 'TeamsData', value: 2 }
   };
-  let currentOpenInfoWindow;
+  const globalInfoWindow = new google.maps.InfoWindow();
 
   async function _getInfoWindowContent(infoWindow, marker, lat, lng, term) {
     const teamsData = _cache.get(CacheKeys.TEAMS_DATA.name);
@@ -29,7 +29,7 @@ function init() {
 
       const fetchSettings = {
         method: 'GET'
-      }
+      };
 
       const endpoint = 'https://api.foursquare.com/v2/venues/search';
       try {
@@ -49,7 +49,6 @@ function init() {
       }
     }
 
-    currentOpenInfoWindow = infoWindow;
     infoWindow.open(map, marker);
   }
 
@@ -60,7 +59,6 @@ function init() {
       this.name = name;
       this.visible = ko.observable(true);
       this.position = ko.observable(position);
-      this.infoWindow = new google.maps.InfoWindow();
       this.marker = new google.maps.Marker({
         map: map,
         title: this.name,
@@ -84,13 +82,9 @@ function init() {
     }
 
     async click() {
-      if (currentOpenInfoWindow && currentOpenInfoWindow.content !== this.infoWindow.content) {
-        currentOpenInfoWindow.close();
-      }
-
-      map.setCenter(this.position());
+      map.panTo(this.position());
       this.toggleBounce();
-      await _getInfoWindowContent(this.infoWindow, this.marker, this.position().lat, this.position().lng, this.name);
+      await _getInfoWindowContent(globalInfoWindow, this.marker, this.position().lat, this.position().lng, this.name);
       this.toggleBounce();
     }
   }
@@ -106,6 +100,14 @@ function init() {
         new Team("Club Atlético San Lorenzo de Almagro", { "lat": -34.652166, "lng": -58.437009 }),
         new Team("Club Atlético Racing", { "lat": -34.663447, "lng": -58.362874 }),
       ]);
+
+      const bounds = new google.maps.LatLngBounds();
+      let first = 0,
+       last = this.teams().length - 1;
+      bounds.extend(this.teams()[first].position());
+      bounds.extend(this.teams()[last].position());
+      map.fitBounds(bounds);
+
       this.visibleTeams = ko.observableArray(this.teams());
       this.query.subscribe(function search(searchValue) {
         this.visibleTeams(this.teams().filter(function (team) {
